@@ -1,0 +1,8 @@
+{% extends "words/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <h2>Logged out successfully</h2>
+        <a class="ml-2" href="{% url 'login' %}">Login again</a>
+    </div>
+{% endblock content %}

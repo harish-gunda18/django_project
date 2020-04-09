@@ -1,0 +1,35 @@
+{% extends "words/base.html" %}
+{% block content %}
+        {% if reviewed == "n" %}
+            <h3 class="text-center">New word</h3>
+        {% elif reviewed == "r" %}
+            <h3 class="text-center">You're Reviewing this word</h3>
+        {% else %}
+            <h3 class="text-center">You've mastered this word</h3>
+        {% endif %}
+    <div class="container bg-light pb-3 border">
+        <div class="text-center">
+            <h1 class="text-primary">{{ word.word }}</h1>
+        </div>
+        <p class="text-secondary">meaning: {{ word.meaning }}</p>
+        <p class="text-info">example: {{ word.example_sentence }}</p>
+        <div class="button-container">
+            <form id="known" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="wordid" value={{word.id}}>
+                <input type="hidden" name="known" value="yes">
+                <input type="hidden" name="reviewed" value="{{ reviewed }}">
+            </form>
+            <form id="unknown" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="wordid" value={{word.id}}>
+                <input type="hidden" name="known" value="no">
+                <input type="hidden" name="reviewed" value="{{ reviewed }}">
+            </form>
+            <div class="text-center">
+                <button form="known" type="submit" class="btn btn-success">Known word</button>
+                <button form="unknown" type="submit" class="btn btn-danger">Unknown word</button>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
