@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -35,3 +37,13 @@ def profile(request):
         'p_form': p_form
     }
     return render(request, 'users/profile.html', context)
+
+
+class PasswordResetModifiedView(PasswordResetView):
+    def form_valid(self, form):
+        if self.request.method == "POST":
+            if User.objects.filter(email=form.cleaned_data['email']).exists():
+                return super().form_valid(form)
+            form.errors['email'] = ' '
+            error = 'The email address provided does not exist in our database'
+            return render(self.request, 'users/password_reset.html', {'form': form, 'error': error})
